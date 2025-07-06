@@ -1,5 +1,3 @@
-// App.tsx
-
 import { useState } from "react";
 import "./App.css";
 
@@ -8,23 +6,23 @@ function App() {
   const [feedback, setFeedback] = useState("");
 
   const handleReview = async () => {
-    const res = await fetch("
-import { useState } from "react";
-import "./App.css";
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/review`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
 
-function App() {
-  const [code, setCode] = useState("");
-  const [feedback, setFeedback] = useState("");
+      if (!res.ok) {
+        throw new Error(`Error: ${res.status}`);
+      }
 
-  const handleReview = async () => {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/review`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ code }),
-    });
-
-    const data = await res.json();
-    setFeedback(data.feedback);
+      const data = await res.json();
+      setFeedback(data.feedback);
+    } catch (error) {
+      setFeedback("Failed to fetch feedback. Please try again.");
+      console.error(error);
+    }
   };
 
   return (
@@ -48,5 +46,6 @@ function App() {
   );
 }
 
-export default App;", {
+export default App;
+
       
