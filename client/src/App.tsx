@@ -4,25 +4,37 @@ import "./App.css";
 function App() {
   const [code, setCode] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleReview = async () => {
+    setLoading(true);
+    setFeedback("");
+    setError("");
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/review`, {
+      const res = await fetch("https://code-review-bot-3yq7.onrender.com/api/review", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),
       });
-
-      if (!res.ok) {
-        throw new Error(`Error: ${res.status}`);
-      }
-
       const data = await res.json();
-      setFeedback(data.feedback);
-    } catch (error) {
-      setFeedback("Failed to fetch feedback. Please try again.");
-      console.error(error);
+      if (data.feedback) {
+        setFeedback(data.feedback);
+      } else {
+        setError("No feedback returned.");
+      }
+    } catch (err) {
+      setError("Failed to get feedback. Please try again.");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  // FIXED handleClear function
+  const handleClear = () => {
+    setCode("");
+    setFeedback("");
+    setError("");
   };
 
   return (
@@ -32,11 +44,24 @@ function App() {
         placeholder="Paste your code here..."
         value={code}
         onChange={(e) => setCode(e.target.value)}
+        disabled={loading}
       />
       <br />
-      <button onClick={handleReview}>Review Code</button>
+      <button onClick={handleReview} disabled={loading || !code}>
+        {loading ? "Reviewing..." : "Review Code"}
+      </button>
+      <button onClick={handleClear} disabled={loading && !code} style={{ marginLeft: "1rem" }}>
+        Clear
+      </button>
+      {error && (
+        <pre className="error">
+          <strong>Error:</strong>
+          <br />
+          {error}
+        </pre>
+      )}
       {feedback && (
-        <pre>
+        <pre className="feedback">
           <strong>Feedback:</strong>
           <br />
           {feedback}
