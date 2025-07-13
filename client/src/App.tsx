@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Light from "./Light";
 import "./App.css";
 
@@ -119,6 +119,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
