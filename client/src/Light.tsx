@@ -1,17 +1,22 @@
-import React, { useState, useRef } from "react";
+import { useRef } from "react";
 import { motion, useMotionValue, animate, useTransform } from "framer-motion";
-import "./Light.css";
+import "./App.css";
 
-const Light = ({ isOn, setIsOn }) => {
+interface LightProps {
+  isOn: boolean;
+  setIsOn: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Light: React.FC<LightProps> = ({ isOn, setIsOn }) => {
   const pullY = useMotionValue(0);
   const stringLength = useTransform(pullY, [0, 200], [50, 250]);
   const bulbScale = useTransform(pullY, [0, 200], [1, 1.1]);
 
   const pullingRef = useRef(false);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const handleMouseMove = (e) => {
-    if (pullingRef.current) {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (pullingRef.current && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       const offset = e.clientY - rect.top - 100;
       pullY.set(Math.max(0, Math.min(offset, 200)));
@@ -32,7 +37,7 @@ const Light = ({ isOn, setIsOn }) => {
       });
 
       if (strength > 80) {
-        setIsOn((prev) => !prev);
+        setIsOn((prev: boolean) => !prev);
       }
     }
   };
@@ -118,3 +123,4 @@ const Light = ({ isOn, setIsOn }) => {
 };
 
 export default Light;
+
