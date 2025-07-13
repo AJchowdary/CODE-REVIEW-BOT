@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import Light from "./Light";
 import "./App.css";
 
 export default function App() {
   // Bulb state
-  const [lightOn, setLightOn] = useState(false);
+  const [isOn, setIsOn] = useState(true);
 
   // Code review states
   const [code, setCode] = useState("");
@@ -39,86 +40,14 @@ export default function App() {
   };
 
   return (
-    <div className={`bulb-demo-root ${lightOn ? "light-on" : ""}`}>
-      <div className="bulb-interaction-area">
-        {/* Realistic Bulb */}
-        <div className={`bulb-outer ${lightOn ? "on" : ""}`}>
-          <svg
-            className="bulb-svg"
-            viewBox="0 0 120 220"
-            width="120"
-            height="220"
-            aria-hidden="true"
-          >
-            {/* Bulb Outline */}
-            <ellipse
-              cx="60"
-              cy="100"
-              rx="50"
-              ry="80"
-              fill={lightOn ? "#fffde4" : "#f4f4f4"}
-              stroke="#e0e0e0"
-              strokeWidth="5"
-              filter={lightOn ? "url(#bulbGlow)" : ""}
-            />
-            {/* Filament */}
-            <path
-              d="M50 120 Q60 110 70 120"
-              stroke={lightOn ? "#ffd700" : "#888"}
-              strokeWidth="3"
-              fill="none"
-            />
-            {/* Bulb Base */}
-            <rect
-              x="45"
-              y="180"
-              width="30"
-              height="25"
-              rx="8"
-              fill="#bbb"
-              stroke="#888"
-              strokeWidth="3"
-            />
-            {/* Glow filter */}
-            <defs>
-              <filter id="bulbGlow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="16" result="coloredBlur" />
-                <feMerge>
-                  <feMergeNode in="coloredBlur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-            {/* Filament Glow */}
-            {lightOn && (
-              <ellipse
-                cx="60"
-                cy="120"
-                rx="18"
-                ry="10"
-                fill="#ffe066"
-                opacity="0.7"
-                filter="url(#bulbGlow)"
-              />
-            )}
-          </svg>
-          {/* Animated Glow */}
-          <div className={`bulb-glow ${lightOn ? "on" : ""}`} />
-        </div>
-        {/* Bulb Switch Button */}
-        <button
-          className="bulb-switch"
-          onClick={() => setLightOn((on) => !on)}
-          aria-label={lightOn ? "Turn off bulb" : "Turn on bulb"}
-        >
-          {lightOn ? "💡 Turn Off" : "💡 Turn On"}
-        </button>
-      </div>
+    <div className={`bulb-app-root${isOn ? " bulb-on" : ""}`}>
+      {/* Bulb effect with pull-cord */}
+      <Light isOn={isOn} setIsOn={setIsOn} />
 
-      {/* Show code review UI only when bulb is ON */}
-      {lightOn && (
-        <main className={`crb-main ${feedback || loading ? "split" : ""}`}>
-          <section className={`crb-code-block ${feedback || loading ? "left" : ""}`}>
+      {/* Code Review UI appears only when bulb is ON */}
+      {isOn && (
+        <main className={`crb-main${feedback || loading ? " split" : ""}`}>
+          <section className={`crb-code-block${feedback || loading ? " left" : ""}`}>
             <h1 className="crb-title">🌈 AI Code Review Bot</h1>
             <form
               className="crb-review-form"
@@ -190,6 +119,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
