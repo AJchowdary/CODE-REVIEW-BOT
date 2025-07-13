@@ -1,46 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import "./App.css";
 
 export default function App() {
+  // Bulb state
+  const [lightOn, setLightOn] = useState(false);
+
+  // Code review states
   const [code, setCode] = useState("");
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [lightOn, setLightOn] = useState(false);
-  const [dragY, setDragY] = useState(0);
-  const leverRef = useRef<HTMLDivElement>(null);
 
-  // Handle lever drag (mouse/touch)
-  const handleLeverDrag = (clientY: number) => {
-    const leverTop = leverRef.current?.getBoundingClientRect().top || 0;
-    const diff = clientY - leverTop;
-    setDragY(diff > 0 && diff < 100 ? diff : 0);
-    if (diff > 80) {
-      setLightOn(true);
-      setDragY(0);
-    }
-  };
-
-  // Mouse events
-  const onMouseDown = () => {
-  const move = (ev: MouseEvent) => handleLeverDrag(ev.clientY);
-  const up = () => {
-    window.removeEventListener("mousemove", move);
-    window.removeEventListener("mouseup", up);
-    setDragY(0);
-  };
-  window.addEventListener("mousemove", move);
-  window.addEventListener("mouseup", up);
-};
-
-
-  // Touch events
-  const onTouchMove = (e: React.TouchEvent) => {
-    handleLeverDrag(e.touches[0].clientY);
-  };
-  const onTouchEnd = () => setDragY(0);
-
-  // Review handler
+  // Handle review
   const handleReview = async () => {
     setLoading(true);
     setFeedback("");
@@ -67,36 +38,87 @@ export default function App() {
     setError("");
   };
 
-  // Layout control
-  const showSplit = loading || feedback;
-
   return (
-    <div className={`crb-root ${lightOn ? "light-on" : ""}`}>
-      {/* Light Pull Lever */}
-      {!lightOn && (
-        <div className="crb-lever-area">
-          <div
-            className="crb-lever"
-            ref={leverRef}
-            style={{ transform: `translateY(${dragY}px)` }}
-            onMouseDown={onMouseDown}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
-            tabIndex={0}
-            role="button"
-            aria-label="Pull down to turn on light"
+    <div className={`bulb-demo-root ${lightOn ? "light-on" : ""}`}>
+      <div className="bulb-interaction-area">
+        {/* Realistic Bulb */}
+        <div className={`bulb-outer ${lightOn ? "on" : ""}`}>
+          <svg
+            className="bulb-svg"
+            viewBox="0 0 120 220"
+            width="120"
+            height="220"
+            aria-hidden="true"
           >
-            <div className="crb-lever-knob" />
-            <div className="crb-lever-string" />
-            <span className="crb-lever-label">Pull to turn on light</span>
-          </div>
+            {/* Bulb Outline */}
+            <ellipse
+              cx="60"
+              cy="100"
+              rx="50"
+              ry="80"
+              fill={lightOn ? "#fffde4" : "#f4f4f4"}
+              stroke="#e0e0e0"
+              strokeWidth="5"
+              filter={lightOn ? "url(#bulbGlow)" : ""}
+            />
+            {/* Filament */}
+            <path
+              d="M50 120 Q60 110 70 120"
+              stroke={lightOn ? "#ffd700" : "#888"}
+              strokeWidth="3"
+              fill="none"
+            />
+            {/* Bulb Base */}
+            <rect
+              x="45"
+              y="180"
+              width="30"
+              height="25"
+              rx="8"
+              fill="#bbb"
+              stroke="#888"
+              strokeWidth="3"
+            />
+            {/* Glow filter */}
+            <defs>
+              <filter id="bulbGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="16" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            {/* Filament Glow */}
+            {lightOn && (
+              <ellipse
+                cx="60"
+                cy="120"
+                rx="18"
+                ry="10"
+                fill="#ffe066"
+                opacity="0.7"
+                filter="url(#bulbGlow)"
+              />
+            )}
+          </svg>
+          {/* Animated Glow */}
+          <div className={`bulb-glow ${lightOn ? "on" : ""}`} />
         </div>
-      )}
+        {/* Bulb Switch Button */}
+        <button
+          className="bulb-switch"
+          onClick={() => setLightOn((on) => !on)}
+          aria-label={lightOn ? "Turn off bulb" : "Turn on bulb"}
+        >
+          {lightOn ? "💡 Turn Off" : "💡 Turn On"}
+        </button>
+      </div>
 
-      {/* Main App UI */}
+      {/* Show code review UI only when bulb is ON */}
       {lightOn && (
-        <main className={`crb-main ${showSplit ? "split" : ""}`}>
-          <section className={`crb-code-block ${showSplit ? "left" : ""}`}>
+        <main className={`crb-main ${feedback || loading ? "split" : ""}`}>
+          <section className={`crb-code-block ${feedback || loading ? "left" : ""}`}>
             <h1 className="crb-title">🌈 AI Code Review Bot</h1>
             <form
               className="crb-review-form"
@@ -147,7 +169,7 @@ export default function App() {
               </pre>
             )}
           </section>
-          {showSplit && (
+          {(feedback || loading) && (
             <section className="crb-review-block">
               {feedback && (
                 <pre className="crb-feedback" aria-live="polite" tabIndex={0}>
@@ -168,6 +190,9 @@ export default function App() {
     </div>
   );
 }
+
+
+
 
 
 
