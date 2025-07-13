@@ -1,51 +1,77 @@
-/* App.css */
-
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f2f5;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f5f7fa;
   margin: 0;
+  padding: 0;
+}
+
+div {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
   padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+}
+
+h1 {
+  text-align: center;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
 }
 
 textarea {
   width: 100%;
-  max-width: 600px;
-  height: 200px;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
+  min-height: 120px;
+  padding: 1rem;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 1rem;
   resize: vertical;
-  background-color: #fff;
-  color: #000;
 }
 
 button {
-  margin-top: 1rem;
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #007bff;
+  padding: 0.6rem 1.2rem;
+  margin-right: 0.5rem;
+  background: #2563eb;
   color: #fff;
   border: none;
   border-radius: 6px;
+  font-size: 1rem;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
-button:hover {
-  background-color: #0056b3;
+button:disabled {
+  background: #a5b4fc;
+  cursor: not-allowed;
 }
 
-pre {
-  margin-top: 1rem;
-  background-color: #fff;
-  color: #000;
+button:last-child {
+  background: #64748b;
+}
+
+pre.feedback {
+  background: #e0f2fe;
+  border-left: 4px solid #2563eb;
   padding: 1rem;
+  margin-top: 1.5rem;
   border-radius: 6px;
-  max-width: 600px;
+  color: #1e293b;
   white-space: pre-wrap;
-  border: 1px solid #ddd;
+  word-break: break-word;
 }
+
+pre.error {
+  background: #fee2e2;
+  border-left: 4px solid #dc2626;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  border-radius: 6px;
+  color: #7f1d1d;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 
