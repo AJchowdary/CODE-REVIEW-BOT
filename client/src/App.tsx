@@ -22,7 +22,7 @@ export default function App() {
   };
 
   // Mouse events
-  const onMouseDown = (e: React.MouseEvent) => {
+  const onMouseDown = () => {
     const move = (ev: MouseEvent) => handleLeverDrag(ev.clientY);
     const up = () => {
       window.removeEventListener("mousemove", move);
@@ -167,6 +167,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
