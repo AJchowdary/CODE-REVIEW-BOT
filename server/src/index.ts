@@ -9,10 +9,15 @@ const app = express();
 app.use(
   cors({
     origin: "https://code-review-bot-rho.vercel.app", // ✅ Your frontend Vercel domain
-    methods: ["POST"],
+    methods: ["GET", "POST", "OPTIONS"], // <-- Add OPTIONS
     allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 200, // <-- For legacy browser support
+    credentials: true, // <-- Only if you use cookies/auth, otherwise can be omitted
   })
 );
+
+// ... your routes below
+
 
 app.use(express.json());
 
