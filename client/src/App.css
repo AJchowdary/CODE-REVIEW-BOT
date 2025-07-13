@@ -1,4 +1,3 @@
-/* Root and background */
 .crb-root {
   min-height: 100vh;
   background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
@@ -8,13 +7,9 @@
   justify-content: center;
   transition: background 0.5s;
 }
-
-/* Light-on state: brighten background */
 .crb-root.light-on {
   background: linear-gradient(135deg, #f9ffea 0%, #e0e7ff 100%);
 }
-
-/* Lever area */
 .crb-lever-area {
   display: flex;
   justify-content: center;
@@ -22,7 +17,6 @@
   height: 100vh;
   width: 100vw;
 }
-
 .crb-lever {
   display: flex;
   flex-direction: column;
@@ -33,7 +27,6 @@
   transition: transform 0.2s;
   outline: none;
 }
-
 .crb-lever-knob {
   width: 48px;
   height: 48px;
@@ -42,7 +35,6 @@
   box-shadow: 0 4px 24px #ffd70080;
   margin-bottom: 0;
 }
-
 .crb-lever-string {
   width: 6px;
   height: 60px;
@@ -50,7 +42,6 @@
   margin: 0 auto;
   border-radius: 3px;
 }
-
 .crb-lever-label {
   margin-top: 16px;
   font-size: 1.2rem;
@@ -62,8 +53,6 @@
   font-weight: 600;
   letter-spacing: 0.02em;
 }
-
-/* Main layout */
 .crb-main {
   display: flex;
   justify-content: center;
@@ -72,8 +61,6 @@
   width: 100vw;
   transition: all 0.5s;
 }
-
-/* Centered code block by default */
 .crb-code-block {
   background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
   border-radius: 22px;
@@ -88,8 +75,6 @@
   align-items: center;
   position: relative;
 }
-
-/* Title styling */
 .crb-title {
   font-size: 2.1rem;
   font-weight: bold;
@@ -102,8 +87,6 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-
-/* Split layout: code block slides left, review appears right */
 .crb-main.split {
   justify-content: flex-start;
   align-items: flex-start;
@@ -111,7 +94,6 @@
   padding-right: 5vw;
   gap: 3vw;
 }
-
 .crb-main.split .crb-code-block {
   align-items: flex-start;
   margin-left: 0;
@@ -120,8 +102,6 @@
   min-width: 340px;
   max-width: 420px;
 }
-
-/* Review block on right */
 .crb-review-block {
   background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
   border-radius: 22px;
@@ -135,13 +115,10 @@
   align-items: flex-start;
   animation: fadeInRight 0.6s;
 }
-
 @keyframes fadeInRight {
   from { opacity: 0; transform: translateX(80px);}
   to   { opacity: 1; transform: translateX(0);}
 }
-
-/* Review and error feedback styling */
 .crb-feedback, .crb-error, .crb-loading {
   background: #fff;
   border-radius: 14px;
@@ -154,32 +131,26 @@
   white-space: pre-wrap;
   word-break: break-word;
 }
-
 .crb-error {
   border-left: 5px solid #dc2626;
   color: #7f1d1d;
   background: #fee2e2;
 }
-
 .crb-feedback {
   border-left: 5px solid #2563eb;
   background: #e0f2fe;
 }
-
 .crb-loading {
   border-left: 5px solid #fbbf24;
   background: #fffbe7;
   color: #b45309;
 }
-
-/* Form and button styles */
 .crb-review-form {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-
 textarea {
   width: 100%;
   min-height: 120px;
@@ -193,17 +164,14 @@ textarea {
   transition: background 0.2s, border 0.2s;
   margin-bottom: 0.5rem;
 }
-
 textarea:focus {
   outline: 2px solid #2563eb;
   background: #fff;
 }
-
 .crb-button-group {
   display: flex;
   gap: 1rem;
 }
-
 button {
   padding: 0.7rem 1.4rem;
   background: #2563eb;
@@ -216,19 +184,15 @@ button {
   font-weight: 600;
   box-shadow: 0 2px 8px #2563eb22;
 }
-
 button:disabled {
   background: #a5b4fc;
   cursor: not-allowed;
 }
-
 .crb-btn--secondary {
   background: #fff;
   color: #2563eb;
   border: 2px solid #2563eb;
 }
-
-/* Accessibility helpers */
 .crb-visually-hidden {
   position: absolute !important;
   left: -10000px !important;
@@ -237,8 +201,6 @@ button:disabled {
   height: 1px !important;
   overflow: hidden !important;
 }
-
-/* Responsive design */
 @media (max-width: 900px) {
   .crb-main.split {
     flex-direction: column;
@@ -253,7 +215,6 @@ button:disabled {
     margin: 0 auto;
   }
 }
-
 @media (max-width: 600px) {
   .crb-code-block,
   .crb-review-block {
@@ -265,6 +226,7 @@ button:disabled {
     font-size: 1.2rem;
   }
 }
+
 
 
 
