@@ -37,21 +37,21 @@ function App() {
   };
 
   return (
-    <main className="container" aria-label="Code Review App">
+    <main className="crb-container" aria-label="Code Review App">
       <h1 tabIndex={0}>AI Code Review Bot</h1>
       <form
-        className="review-form"
+        className="crb-review-form"
         onSubmit={(e) => {
           e.preventDefault();
           handleReview();
         }}
         aria-label="Code review form"
       >
-        <label htmlFor="code-input" className="visually-hidden">
+        <label htmlFor="crb-code-input" className="crb-visually-hidden">
           Paste your code here
         </label>
         <textarea
-          id="code-input"
+          id="crb-code-input"
           name="code"
           placeholder="Paste your code here..."
           value={code}
@@ -60,7 +60,7 @@ function App() {
           aria-label="Code input"
           aria-required="true"
         />
-        <div className="button-group">
+        <div className="crb-button-group">
           <button
             type="submit"
             onClick={handleReview}
@@ -75,21 +75,21 @@ function App() {
             onClick={handleClear}
             disabled={loading && !code}
             aria-label="Clear code and feedback"
-            className="secondary"
+            className="crb-btn--secondary"
           >
             Clear
           </button>
         </div>
       </form>
       {error && (
-        <pre className="error" role="alert" tabIndex={0}>
+        <pre className="crb-error" role="alert" tabIndex={0}>
           <strong>Error:</strong>
           <br />
           {error}
         </pre>
       )}
       {feedback && (
-        <pre className="feedback" aria-live="polite" tabIndex={0}>
+        <pre className="crb-feedback" aria-live="polite" tabIndex={0}>
           <strong>Feedback:</strong>
           <br />
           {feedback}
@@ -98,6 +98,9 @@ function App() {
     </main>
   );
 }
+
+export default App;
+
 
 export default App;
 
