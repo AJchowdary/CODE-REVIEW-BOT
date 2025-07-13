@@ -23,15 +23,16 @@ export default function App() {
 
   // Mouse events
   const onMouseDown = () => {
-    const move = (ev: MouseEvent) => handleLeverDrag(ev.clientY);
-    const up = () => {
-      window.removeEventListener("mousemove", move);
-      window.removeEventListener("mouseup", up);
-      setDragY(0);
-    };
-    window.addEventListener("mousemove", move);
-    window.addEventListener("mouseup", up);
+  const move = (ev: MouseEvent) => handleLeverDrag(ev.clientY);
+  const up = () => {
+    window.removeEventListener("mousemove", move);
+    window.removeEventListener("mouseup", up);
+    setDragY(0);
   };
+  window.addEventListener("mousemove", move);
+  window.addEventListener("mouseup", up);
+};
+
 
   // Touch events
   const onTouchMove = (e: React.TouchEvent) => {
