@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./App.css";
 
 function App() {
@@ -6,6 +6,28 @@ function App() {
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [lightOn, setLightOn] = useState(false);
+  const [dragY, setDragY] = useState(0);
+  const leverRef = useRef<HTMLDivElement>(null);
+
+  // Simulate pull-down gesture for the light switch
+  const handleLeverDrag = (e: React.MouseEvent | React.TouchEvent) => {
+    let clientY;
+    if ("touches" in e) {
+      clientY = e.touches[0].clientY;
+    } else {
+      clientY = e.clientY;
+    }
+    const leverTop = leverRef.current?.getBoundingClientRect().top || 0;
+    const diff = clientY - leverTop;
+    setDragY(diff > 0 && diff < 100 ? diff : 0);
+    if (diff > 80) {
+      setLightOn(true);
+      setDragY(0);
+    }
+  };
+
+  const handleLeverEnd = () => setDragY(0);
 
   const handleReview = async () => {
     setLoading(true);
@@ -36,66 +58,111 @@ function App() {
     setError("");
   };
 
+  // Layout control
+  const showSplit = loading || feedback;
+
   return (
-    <main className="crb-container" aria-label="Code Review App">
-      <h1 tabIndex={0}>AI Code Review Bot</h1>
-      <form
-        className="crb-review-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleReview();
-        }}
-        aria-label="Code review form"
-      >
-        <label htmlFor="crb-code-input" className="crb-visually-hidden">
-          Paste your code here
-        </label>
-        <textarea
-          id="crb-code-input"
-          name="code"
-          placeholder="Paste your code here..."
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          disabled={loading}
-          aria-label="Code input"
-          aria-required="true"
-        />
-        <div className="crb-button-group">
-          <button
-            type="submit"
-            onClick={handleReview}
-            disabled={loading || !code}
-            aria-busy={loading}
-            aria-label="Review code"
+    <div className={`crb-root ${lightOn ? "light-on" : ""}`}>
+      {/* Light Pull Lever */}
+      {!lightOn && (
+        <div className="crb-lever-area">
+          <div
+            className="crb-lever"
+            ref={leverRef}
+            style={{ transform: `translateY(${dragY}px)` }}
+            onMouseDown={(e) => {
+              window.onmousemove = (ev) => handleLeverDrag(ev);
+              window.onmouseup = () => {
+                window.onmousemove = null;
+                handleLeverEnd();
+              };
+            }}
+            onTouchMove={handleLeverDrag}
+            onTouchEnd={handleLeverEnd}
+            tabIndex={0}
+            role="button"
+            aria-label="Pull down to turn on the light"
           >
-            {loading ? "Reviewing..." : "Review Code"}
-          </button>
-          <button
-            type="button"
-            onClick={handleClear}
-            disabled={loading && !code}
-            aria-label="Clear code and feedback"
-            className="crb-btn--secondary"
-          >
-            Clear
-          </button>
+            <div className="crb-lever-knob" />
+            <div className="crb-lever-string" />
+            <span className="crb-lever-label">Pull to turn on light</span>
+          </div>
         </div>
-      </form>
-      {error && (
-        <pre className="crb-error" role="alert" tabIndex={0}>
-          <strong>Error:</strong>
-          <br />
-          {error}
-        </pre>
       )}
-      {feedback && (
-        <pre className="crb-feedback" aria-live="polite" tabIndex={0}>
-          <strong>Feedback:</strong>
-          <br />
-          {feedback}
-        </pre>
+
+      {/* Main App UI */}
+      {lightOn && (
+        <main className={`crb-main ${showSplit ? "split" : ""}`}>
+          <section className={`crb-code-block ${showSplit ? "left" : ""}`}>
+            <h1 className="crb-title">🌈 AI Code Review Bot</h1>
+            <form
+              className="crb-review-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleReview();
+              }}
+              aria-label="Code review form"
+            >
+              <label htmlFor="crb-code-input" className="crb-visually-hidden">
+                Paste your code here
+              </label>
+              <textarea
+                id="crb-code-input"
+                name="code"
+                placeholder="Paste your code here..."
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                disabled={loading}
+                aria-label="Code input"
+                aria-required="true"
+              />
+              <div className="crb-button-group">
+                <button
+                  type="submit"
+                  disabled={loading || !code}
+                  aria-busy={loading}
+                  aria-label="Review code"
+                >
+                  {loading ? "Reviewing..." : "Review Code"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  disabled={loading && !code}
+                  aria-label="Clear code and feedback"
+                  className="crb-btn--secondary"
+                >
+                  Clear
+                </button>
+              </div>
+            </form>
+            {error && (
+              <pre className="crb-error" role="alert" tabIndex={0}>
+                <strong>Error:</strong>
+                <br />
+                {error}
+              </pre>
+            )}
+          </section>
+          {showSplit && (
+            <section className="crb-review-block">
+              {feedback && (
+                <pre className="crb-feedback" aria-live="polite" tabIndex={0}>
+                  <strong>Feedback:</strong>
+                  <br />
+                  {feedback}
+                </pre>
+              )}
+              {loading && (
+                <div className="crb-feedback crb-loading">
+                  <span>Reviewing your code...</span>
+                </div>
+              )}
+            </section>
+          )}
+        </main>
       )}
-    </main>
+    </div>
   );
 }
 
