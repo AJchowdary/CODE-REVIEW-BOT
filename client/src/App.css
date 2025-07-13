@@ -1,5 +1,4 @@
-/* App.css */
-
+/* === Bulb and Cord Styles === */
 body {
   margin: 0;
   padding: 0;
@@ -22,7 +21,63 @@ body {
   color: #333;
 }
 
-/* Main layout for code review UI */
+.light-container {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 320px;
+  background: transparent;
+  transition: background 0.7s;
+}
+.light-container.day {
+  /* The bulb-app-root handles the background */
+}
+.bulb-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+.bulb {
+  z-index: 2;
+  margin-bottom: -8px;
+}
+.bulb-shape {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bulb-shape.on svg {
+  filter: drop-shadow(0 0 32px #ffe066cc);
+  transition: filter 0.4s;
+}
+.bulb-shape.off svg {
+  filter: none;
+  transition: filter 0.4s;
+}
+.cord {
+  width: 6px;
+  background: #bbb;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: grab;
+  transition: background 0.3s;
+}
+.handle {
+  width: 24px;
+  height: 24px;
+  background: #ffe066;
+  border-radius: 50%;
+  border: 2px solid #bdbdbd;
+  margin: 0 auto;
+  margin-top: -12px;
+  box-shadow: 0 2px 8px #ffe06699;
+}
+
+/* === Code Review UI Styles === */
 .crb-main {
   width: 90vw;
   max-width: 1200px;
@@ -36,7 +91,6 @@ body {
   gap: 2rem;
 }
 
-/* Code input block */
 .crb-code-block {
   background: #fff;
   border-radius: 1rem;
@@ -50,7 +104,6 @@ body {
   flex: 1 1 40%;
 }
 
-/* Feedback block */
 .crb-review-block {
   background: #fff;
   border-radius: 1rem;
@@ -141,6 +194,7 @@ button[disabled] {
   clip: rect(0, 0, 0, 0) !important;
   border: 0 !important;
 }
+
 
 
 
