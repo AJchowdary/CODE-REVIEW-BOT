@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import "./App.css";
 
-function App() {
+export default function App() {
   const [code, setCode] = useState("");
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
@@ -10,14 +10,8 @@ function App() {
   const [dragY, setDragY] = useState(0);
   const leverRef = useRef<HTMLDivElement>(null);
 
-  // Simulate pull-down gesture for the light switch
-  const handleLeverDrag = (e: React.MouseEvent | React.TouchEvent) => {
-    let clientY;
-    if ("touches" in e) {
-      clientY = e.touches[0].clientY;
-    } else {
-      clientY = e.clientY;
-    }
+  // Handle lever drag (mouse/touch)
+  const handleLeverDrag = (clientY: number) => {
     const leverTop = leverRef.current?.getBoundingClientRect().top || 0;
     const diff = clientY - leverTop;
     setDragY(diff > 0 && diff < 100 ? diff : 0);
@@ -27,8 +21,25 @@ function App() {
     }
   };
 
-  const handleLeverEnd = () => setDragY(0);
+  // Mouse events
+  const onMouseDown = (e: React.MouseEvent) => {
+    const move = (ev: MouseEvent) => handleLeverDrag(ev.clientY);
+    const up = () => {
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseup", up);
+      setDragY(0);
+    };
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mouseup", up);
+  };
 
+  // Touch events
+  const onTouchMove = (e: React.TouchEvent) => {
+    handleLeverDrag(e.touches[0].clientY);
+  };
+  const onTouchEnd = () => setDragY(0);
+
+  // Review handler
   const handleReview = async () => {
     setLoading(true);
     setFeedback("");
@@ -40,12 +51,9 @@ function App() {
         body: JSON.stringify({ code }),
       });
       const data = await res.json();
-      if (data.feedback) {
-        setFeedback(data.feedback);
-      } else {
-        setError("No feedback returned.");
-      }
-    } catch (err) {
+      if (data.feedback) setFeedback(data.feedback);
+      else setError("No feedback returned.");
+    } catch {
       setError("Failed to get feedback. Please try again.");
     } finally {
       setLoading(false);
@@ -70,18 +78,12 @@ function App() {
             className="crb-lever"
             ref={leverRef}
             style={{ transform: `translateY(${dragY}px)` }}
-            onMouseDown={(e) => {
-              window.onmousemove = (ev) => handleLeverDrag(ev);
-              window.onmouseup = () => {
-                window.onmousemove = null;
-                handleLeverEnd();
-              };
-            }}
-            onTouchMove={handleLeverDrag}
-            onTouchEnd={handleLeverEnd}
+            onMouseDown={onMouseDown}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
             tabIndex={0}
             role="button"
-            aria-label="Pull down to turn on the light"
+            aria-label="Pull down to turn on light"
           >
             <div className="crb-lever-knob" />
             <div className="crb-lever-string" />
@@ -97,7 +99,7 @@ function App() {
             <h1 className="crb-title">🌈 AI Code Review Bot</h1>
             <form
               className="crb-review-form"
-              onSubmit={(e) => {
+              onSubmit={e => {
                 e.preventDefault();
                 handleReview();
               }}
@@ -111,7 +113,7 @@ function App() {
                 name="code"
                 placeholder="Paste your code here..."
                 value={code}
-                onChange={(e) => setCode(e.target.value)}
+                onChange={e => setCode(e.target.value)}
                 disabled={loading}
                 aria-label="Code input"
                 aria-required="true"
@@ -166,7 +168,6 @@ function App() {
   );
 }
 
-export default App;
 
 
 
