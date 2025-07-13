@@ -30,7 +30,6 @@ function App() {
     }
   };
 
-  // FIXED handleClear function
   const handleClear = () => {
     setCode("");
     setFeedback("");
@@ -38,39 +37,69 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>AI Code Review Bot</h1>
-      <textarea
-        placeholder="Paste your code here..."
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-        disabled={loading}
-      />
-      <br />
-      <button onClick={handleReview} disabled={loading || !code}>
-        {loading ? "Reviewing..." : "Review Code"}
-      </button>
-      <button onClick={handleClear} disabled={loading && !code} style={{ marginLeft: "1rem" }}>
-        Clear
-      </button>
+    <main className="container" aria-label="Code Review App">
+      <h1 tabIndex={0}>AI Code Review Bot</h1>
+      <form
+        className="review-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleReview();
+        }}
+        aria-label="Code review form"
+      >
+        <label htmlFor="code-input" className="visually-hidden">
+          Paste your code here
+        </label>
+        <textarea
+          id="code-input"
+          name="code"
+          placeholder="Paste your code here..."
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          disabled={loading}
+          aria-label="Code input"
+          aria-required="true"
+        />
+        <div className="button-group">
+          <button
+            type="submit"
+            onClick={handleReview}
+            disabled={loading || !code}
+            aria-busy={loading}
+            aria-label="Review code"
+          >
+            {loading ? "Reviewing..." : "Review Code"}
+          </button>
+          <button
+            type="button"
+            onClick={handleClear}
+            disabled={loading && !code}
+            aria-label="Clear code and feedback"
+            className="secondary"
+          >
+            Clear
+          </button>
+        </div>
+      </form>
       {error && (
-        <pre className="error">
+        <pre className="error" role="alert" tabIndex={0}>
           <strong>Error:</strong>
           <br />
           {error}
         </pre>
       )}
       {feedback && (
-        <pre className="feedback">
+        <pre className="feedback" aria-live="polite" tabIndex={0}>
           <strong>Feedback:</strong>
           <br />
           {feedback}
         </pre>
       )}
-    </div>
+    </main>
   );
 }
 
 export default App;
+
 
       
