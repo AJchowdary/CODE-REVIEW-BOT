@@ -1,22 +1,74 @@
-body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #f5f7fa;
+/* =========================
+   CSS RESET & BASE STYLES
+   ========================= */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
   margin: 0;
   padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f5f7fa;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
-.container {
+/* =========================
+   CONTAINER
+   ========================= */
+.crb-container {
   max-width: 600px;
   margin: 2rem auto;
   background: #fff;
   border-radius: 12px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  -webkit-box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  -moz-box-shadow: 0 2px 16px rgba(0,0,0,0.07);
   padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
+/* =========================
+   HEADINGS
+   ========================= */
 h1 {
   text-align: center;
   color: #1a202c;
@@ -24,10 +76,15 @@ h1 {
   font-size: 2rem;
 }
 
-.review-form {
+/* =========================
+   FORM & INPUTS
+   ========================= */
+.crb-review-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  /* Fallback for gap in older browsers */
+  row-gap: 1rem;
 }
 
 textarea {
@@ -36,11 +93,14 @@ textarea {
   padding: 1rem;
   border: 2px solid #2563eb;
   border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
   font-size: 1rem;
   margin-bottom: 1rem;
   resize: vertical;
   background: #f9fafb;
   color: #222;
+  transition: background 0.2s, border 0.2s;
 }
 
 textarea:focus {
@@ -48,84 +108,110 @@ textarea:focus {
   background: #fff;
 }
 
-.button-group {
+/* =========================
+   BUTTONS
+   ========================= */
+.crb-button-group {
   display: flex;
   gap: 1rem;
+  /* Fallback for gap in older browsers */
+  column-gap: 1rem;
 }
 
-button {
+button,
+.crb-btn--secondary {
   padding: 0.7rem 1.4rem;
   background: #2563eb;
   color: #fff;
   border: none;
   border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.2s;
 }
 
-button:disabled {
+button:disabled,
+.crb-btn--secondary:disabled {
   background: #a5b4fc;
   cursor: not-allowed;
 }
 
-button.secondary {
+.crb-btn--secondary {
   background: #222;
   color: #fff;
 }
 
-pre.feedback {
+/* =========================
+   FEEDBACK & ERROR BOXES
+   ========================= */
+.crb-feedback {
   background: #e0f2fe;
   border-left: 4px solid #2563eb;
   padding: 1rem;
   margin-top: 1.5rem;
   border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
   color: #1e293b;
   white-space: pre-wrap;
   word-break: break-word;
   font-size: 1rem;
 }
 
-pre.error {
+.crb-error {
   background: #fee2e2;
   border-left: 4px solid #dc2626;
   padding: 1rem;
   margin-top: 1.5rem;
   border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
   color: #7f1d1d;
   white-space: pre-wrap;
   word-break: break-word;
   font-size: 1rem;
 }
 
-/* Accessibility: Hide label visually but keep for screen readers */
-.visually-hidden {
-  position: absolute;
-  left: -10000px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
+/* =========================
+   ACCESSIBILITY HELPERS
+   ========================= */
+.crb-visually-hidden {
+  position: absolute !important;
+  left: -10000px !important;
+  top: auto !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
 }
 
-/* Responsive Design */
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
 @media (max-width: 700px) {
-  .container {
+  .crb-container {
     max-width: 95vw;
     padding: 1rem;
   }
   h1 {
     font-size: 1.5rem;
   }
-  button {
+  button,
+  .crb-btn--secondary {
     font-size: 0.95rem;
     padding: 0.6rem 1rem;
   }
-  pre.feedback, pre.error {
+  .crb-feedback, .crb-error {
     font-size: 0.95rem;
     padding: 0.7rem;
   }
 }
+
+/* =========================
+   END OF STYLES
+   ========================= */
+
 
 
 
