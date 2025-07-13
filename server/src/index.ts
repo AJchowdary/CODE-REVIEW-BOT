@@ -4,15 +4,14 @@ import dotenv from "dotenv";
 import { reviewCode } from "./reviewController";
 
 dotenv.config();
-
 const app = express();
 app.use(
   cors({
-    origin: "https://code-review-bot-rho.vercel.app", // ✅ Your frontend Vercel domain
-    methods: ["GET", "POST", "OPTIONS"], // <-- Add OPTIONS
+    origin: "https://code-review-bot-rho.vercel.app", // Your Vercel frontend URL
+    methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    optionsSuccessStatus: 200, // <-- For legacy browser support
-    credentials: true, // <-- Only if you use cookies/auth, otherwise can be omitted
+    optionsSuccessStatus: 200,
+    // credentials: true, // Only if you use cookies/auth, otherwise omit
   })
 );
 
