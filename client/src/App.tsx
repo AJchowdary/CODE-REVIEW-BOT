@@ -37,6 +37,23 @@ export default function App() {
 
   return (
     <div className={`bulb-app-root${isOn ? " bulb-on" : ""}`}>
+      {/* Instruction appears only when lamp is off */}
+      {!isOn && (
+        <div
+          style={{
+            marginTop: "2rem",
+            fontSize: "1.25rem",
+            color: "#ffe066",
+            textAlign: "center",
+            fontWeight: "bold",
+            textShadow: "0 2px 8px #181818, 0 0 2px #fffbe6",
+            letterSpacing: "0.01em"
+          }}
+          aria-live="polite"
+        >
+          Pull the cord to turn on the light
+        </div>
+      )}
       <Light isOn={isOn} setIsOn={setIsOn} />
       {/* Code Review UI appears ONLY when bulb is ON */}
       {isOn && (
