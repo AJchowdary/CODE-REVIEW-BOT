@@ -3,16 +3,12 @@ import Light from "./Light";
 import "./App.css";
 
 export default function App() {
-  // Bulb state
   const [isOn, setIsOn] = useState(true);
-
-  // Code review states
   const [code, setCode] = useState("");
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Handle review
   const handleReview = async () => {
     setLoading(true);
     setFeedback("");
@@ -41,10 +37,7 @@ export default function App() {
 
   return (
     <div className={`bulb-app-root${isOn ? " bulb-on" : ""}`}>
-      {/* Bulb effect with pull-cord */}
       <Light isOn={isOn} setIsOn={setIsOn} />
-
-      {/* Code Review UI appears only when bulb is ON */}
       {isOn && (
         <main className={`crb-main${feedback || loading ? " split" : ""}`}>
           <section className={`crb-code-block${feedback || loading ? " left" : ""}`}>
@@ -119,6 +112,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
