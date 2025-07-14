@@ -65,14 +65,16 @@ ul, ol {
   color: #333;
 }
 
+/* Lamp stays centered above */
 .light-container {
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-height: 320px;
+  min-height: 220px; /* enough space for lamp/cord */
   background: transparent;
   transition: background 0.7s;
+  margin-bottom: 0;
 }
 
 .bulb-area {
@@ -145,40 +147,42 @@ ul, ol {
 }
 
 /* ===== Code Review UI Styles ===== */
-.crb-main {
-  width: 90vw;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
+
+/* When split (after Review Code), fill the area below the lamp */
 .crb-main.split {
   flex-direction: row;
   gap: 2rem;
+  align-items: flex-start;
+  height: calc(100vh - 240px); /* 240px = lamp + margin, adjust if needed */
+  min-height: 400px;
+  margin-top: 0;
+  width: 90vw;
+  max-width: 1200px;
 }
 
-.crb-code-block,
-.crb-review-block {
-  background: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-  padding: 2rem;
-  margin: 2rem 0;
-  min-width: 300px;
+.crb-main.split .crb-code-block,
+.crb-main.split .crb-review-block {
+  margin-top: 0;
+  margin-bottom: 0;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
-  max-height: 60vh;
   overflow: auto;
 }
 
-.crb-code-block.left {
-  flex: 1 1 40%;
-}
+.crb-code-block.left,
 .crb-review-block {
-  flex: 2 1 60%;
-  min-width: 400px;
-  transition: box-shadow 0.2s;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 }
 
 .crb-title {
@@ -190,7 +194,7 @@ ul, ol {
 .crb-review-form textarea {
   width: 100%;
   min-height: 120px;
-  max-height: 40vh;
+  max-height: 100%;
   font-size: 1rem;
   padding: 0.8rem;
   border-radius: 0.5rem;
@@ -202,7 +206,25 @@ ul, ol {
   flex: 1 1 auto;
 }
 
-/* Button Styles */
+/* Feedback area also scrollable and fills its box */
+.crb-feedback {
+  background: #f8f8ff;
+  color: #222;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  white-space: pre-wrap;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 100%;
+  overflow: auto;
+  box-shadow: 0 1px 4px #0001;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Button styles */
 button,
 .crb-btn--secondary {
   padding: 0.7rem 1.4rem;
@@ -240,19 +262,6 @@ button[disabled] {
   cursor: not-allowed;
 }
 
-.crb-feedback {
-  background: #f8f8ff;
-  color: #222;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin-top: 1rem;
-  font-size: 1rem;
-  white-space: pre-wrap;
-  max-height: 28vh;
-  overflow: auto;
-  box-shadow: 0 1px 4px #0001;
-}
-
 .crb-loading {
   color: #888;
 }
@@ -278,6 +287,7 @@ button[disabled] {
   clip: rect(0, 0, 0, 0) !important;
   border: 0 !important;
 }
+
 
 
 
