@@ -1,11 +1,58 @@
-body {
+/* ===== Modern CSS Reset ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: system-ui, sans-serif;
-  background: #181818;
-  color: #222;
 }
 
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #222;
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Do NOT set background here! The lamp UI will control it. */
+}
+
+:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  /* Do NOT reset background/border here; your app styles will handle it */
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+#root, #__next {
+  isolation: isolate;
+}
+
+/* ===== Lamp and App Styles ===== */
 .bulb-app-root {
   min-height: 100vh;
   background: #181818;
@@ -73,7 +120,6 @@ body {
 .cord {
   position: absolute;
   left: 50%;
-  /* The top value should match the bottom of the bulb in the SVG */
   top: 90px; /* Attach cord to bulb base (adjust as needed for your SVG) */
   transform: translateX(-50%);
   width: 6px;
@@ -101,7 +147,7 @@ body {
   justify-content: center;
 }
 
-/* Code Review UI Styles */
+/* ===== Code Review UI Styles ===== */
 .crb-main {
   width: 90vw;
   max-width: 1200px;
@@ -111,7 +157,114 @@ body {
   align-items: stretch;
 }
 .crb-main.split {
-  flex-direction: row
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.crb-code-block {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  padding: 2rem;
+  margin: 2rem 0;
+  flex: 1 1 40%;
+  min-width: 300px;
+}
+.crb-code-block.left {
+  flex: 1 1 40%;
+}
+
+.crb-review-block {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  padding: 2rem;
+  margin: 2rem 0;
+  flex: 2 1 60%;
+  min-width: 400px;
+  transition: box-shadow 0.2s;
+}
+
+.crb-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.crb-review-form textarea {
+  width: 100%;
+  min-height: 120px;
+  font-size: 1rem;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.crb-button-group {
+  display: flex;
+  gap: 1rem;
+}
+
+button,
+.crb-btn--secondary {
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.crb-btn--secondary {
+  background: #eee;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.crb-feedback {
+  background: #f8f8ff;
+  color: #222;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  white-space: pre-wrap;
+}
+
+.crb-loading {
+  color: #888;
+}
+
+.crb-error {
+  background: #fff4e6;
+  color: #c00;
+  border: 1px solid #ffe066;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+/* Accessibility */
+.crb-visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  border: 0 !important;
+}
+
 
 
 
