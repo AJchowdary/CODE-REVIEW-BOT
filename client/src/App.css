@@ -2,13 +2,13 @@ body {
   margin: 0;
   padding: 0;
   font-family: system-ui, sans-serif;
-  background: #232323;
+  background: #181818;
   color: #222;
 }
 
 .bulb-app-root {
   min-height: 100vh;
-  background: #232323;
+  background: #181818;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,7 +16,7 @@ body {
   transition: background 0.7s;
 }
 .bulb-app-root.bulb-on {
-  background: linear-gradient(180deg, #fffbe6 0%, #fff1b8 100%);
+  background: linear-gradient(180deg, #232323 0%, #fffbe6 100%);
   color: #333;
 }
 
@@ -30,16 +30,48 @@ body {
   background: transparent;
   transition: background 0.7s;
 }
+
 .bulb-area {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 2rem;
+  position: relative;
 }
+
+.cord {
+  width: 6px;
+  background: #bbb;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: grab;
+  transition: background 0.3s;
+  position: relative;
+  z-index: 1; /* Behind bulb */
+}
+
+.handle {
+  width: 28px;
+  height: 28px;
+  background: radial-gradient(circle at 60% 40%, #ffe066 80%, #bfae4b 100%);
+  border-radius: 50%;
+  border: 2.5px solid #bdbdbd;
+  margin: 0 auto;
+  margin-top: -14px;
+  box-shadow: 0 2px 12px #ffe06680;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .bulb {
-  z-index: 2;
+  z-index: 2; /* Above cord */
+  position: relative;
   margin-bottom: -8px;
 }
+
 .bulb-shape {
   display: flex;
   align-items: center;
@@ -52,26 +84,6 @@ body {
 .bulb-shape.off svg {
   filter: none;
   transition: filter 0.4s;
-}
-.cord {
-  width: 6px;
-  background: #bbb;
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: grab;
-  transition: background 0.3s;
-}
-.handle {
-  width: 24px;
-  height: 24px;
-  background: #ffe066;
-  border-radius: 50%;
-  border: 2px solid #bdbdbd;
-  margin: 0 auto;
-  margin-top: -12px;
-  box-shadow: 0 2px 8px #ffe06699;
 }
 
 /* Code Review UI Styles */
@@ -191,6 +203,7 @@ button[disabled] {
   clip: rect(0, 0, 0, 0) !important;
   border: 0 !important;
 }
+
 
 
 
