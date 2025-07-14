@@ -3,7 +3,7 @@ import Light from "./Light";
 import "./App.css";
 
 export default function App() {
-  const [isOn, setIsOn] = useState(false); // Lamp and review UI state
+  const [isOn, setIsOn] = useState(false);
   const [code, setCode] = useState("");
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,6 @@ export default function App() {
 
   return (
     <div className={`bulb-app-root${isOn ? " bulb-on" : ""}`}>
-      {/* Instruction appears only when lamp is off */}
       {!isOn && (
         <div
           style={{
@@ -55,7 +54,6 @@ export default function App() {
         </div>
       )}
       <Light isOn={isOn} setIsOn={setIsOn} />
-      {/* Code Review UI appears ONLY when bulb is ON */}
       {isOn && (
         <main className={`crb-main${feedback || loading ? " split" : ""}`}>
           <section className={`crb-code-block${feedback || loading ? " left" : ""}`}>
@@ -67,6 +65,7 @@ export default function App() {
                 handleReview();
               }}
               aria-label="Code review form"
+              style={{ flex: 1, display: "flex", flexDirection: "column" }}
             >
               <label htmlFor="crb-code-input" className="crb-visually-hidden">
                 Paste your code here
@@ -80,6 +79,7 @@ export default function App() {
                 disabled={loading}
                 aria-label="Code input"
                 aria-required="true"
+                style={{ flex: 1, minHeight: 0, maxHeight: "100%" }}
               />
               <div className="crb-button-group">
                 <button
