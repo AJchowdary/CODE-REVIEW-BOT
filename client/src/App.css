@@ -150,12 +150,12 @@ ul, ol {
 
 /* When split (after Review Code), fill the area below the lamp */
 .crb-main.split {
+  display: flex;
   flex-direction: row;
   gap: 2rem;
   align-items: flex-start;
   height: calc(100vh - 240px); /* 240px = lamp + margin, adjust if needed */
   min-height: 400px;
-  margin-top: 0;
   width: 90vw;
   max-width: 1200px;
 }
@@ -208,6 +208,10 @@ ul, ol {
 
 /* Feedback area also scrollable and fills its box */
 .crb-feedback {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 100%;
+  overflow: auto;
   background: #f8f8ff;
   color: #222;
   border-radius: 0.5rem;
@@ -215,10 +219,6 @@ ul, ol {
   margin-top: 1rem;
   font-size: 1rem;
   white-space: pre-wrap;
-  flex: 1 1 auto;
-  min-height: 0;
-  max-height: 100%;
-  overflow: auto;
   box-shadow: 0 1px 4px #0001;
   display: flex;
   flex-direction: column;
@@ -287,6 +287,7 @@ button[disabled] {
   clip: rect(0, 0, 0, 0) !important;
   border: 0 !important;
 }
+
 
 
 
