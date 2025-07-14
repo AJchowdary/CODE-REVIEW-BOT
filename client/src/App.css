@@ -17,7 +17,6 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Do NOT set background here! The lamp UI will control it. */
 }
 
 :focus {
@@ -36,7 +35,6 @@ input, button, textarea, select {
 
 button {
   cursor: pointer;
-  /* Do NOT reset background/border here; your app styles will handle it */
 }
 
 p, h1, h2, h3, h4, h5, h6 {
@@ -67,7 +65,6 @@ ul, ol {
   color: #333;
 }
 
-/* Bulb and Cord Styles */
 .light-container {
   width: 100vw;
   display: flex;
@@ -88,8 +85,8 @@ ul, ol {
 
 .bulb-housing {
   position: relative;
-  width: 60px;   /* match SVG width */
-  height: 280px; /* bulb height + max cord */
+  width: 60px;
+  height: 280px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -161,25 +158,24 @@ ul, ol {
   gap: 2rem;
 }
 
-.crb-code-block {
-  background: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-  padding: 2rem;
-  margin: 2rem 0;
-  flex: 1 1 40%;
-  min-width: 300px;
-}
-.crb-code-block.left {
-  flex: 1 1 40%;
-}
-
+.crb-code-block,
 .crb-review-block {
   background: #fff;
   border-radius: 1rem;
   box-shadow: 0 2px 16px rgba(0,0,0,0.07);
   padding: 2rem;
   margin: 2rem 0;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.crb-code-block.left {
+  flex: 1 1 40%;
+}
+.crb-review-block {
   flex: 2 1 60%;
   min-width: 400px;
   transition: box-shadow 0.2s;
@@ -194,6 +190,7 @@ ul, ol {
 .crb-review-form textarea {
   width: 100%;
   min-height: 120px;
+  max-height: 40vh;
   font-size: 1rem;
   padding: 0.8rem;
   border-radius: 0.5rem;
@@ -201,32 +198,46 @@ ul, ol {
   margin-bottom: 1rem;
   resize: vertical;
   font-family: inherit;
+  overflow: auto;
+  flex: 1 1 auto;
 }
 
-.crb-button-group {
-  display: flex;
-  gap: 1rem;
-}
-
+/* Button Styles */
 button,
 .crb-btn--secondary {
   padding: 0.7rem 1.4rem;
   font-size: 1rem;
   border-radius: 0.5rem;
-  border: none;
+  border: 2px solid transparent;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  font-weight: 600;
+}
+
+button[type="submit"] {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+  box-shadow: 0 2px 8px #2563eb22;
+}
+button[type="submit"]:hover:not([disabled]) {
+  background: #1746a0;
+  border-color: #1746a0;
+}
+
+.crb-btn--secondary {
+  background: #e11d48;
+  color: #fff;
+  border: 2px solid #e11d48;
+}
+.crb-btn--secondary:hover:not([disabled]) {
+  background: #be123c;
+  border-color: #be123c;
 }
 
 button[disabled] {
   opacity: 0.6;
   cursor: not-allowed;
-}
-
-.crb-btn--secondary {
-  background: #eee;
-  color: #333;
-  border: 1px solid #ccc;
 }
 
 .crb-feedback {
@@ -237,6 +248,9 @@ button[disabled] {
   margin-top: 1rem;
   font-size: 1rem;
   white-space: pre-wrap;
+  max-height: 28vh;
+  overflow: auto;
+  box-shadow: 0 1px 4px #0001;
 }
 
 .crb-loading {
