@@ -3,7 +3,7 @@ import Light from "./Light";
 import "./App.css";
 
 export default function App() {
-  const [isOn, setIsOn] = useState(false); // UI hidden by default
+  const [isOn, setIsOn] = useState(false); // Lamp and review UI state
   const [code, setCode] = useState("");
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
@@ -130,6 +130,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
