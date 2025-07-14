@@ -1,151 +1,119 @@
-import { useRef } from "react";
-import { motion, useMotionValue, animate, useTransform } from "framer-motion";
+import { useState } from "react";
+import Light from "./Light";
 import "./App.css";
 
-interface LightProps {
-  isOn: boolean;
-  setIsOn: React.Dispatch<React.SetStateAction<boolean>>;
-}
+export default function App() {
+  const [isOn, setIsOn] = useState(false); // UI hidden by default
+  const [code, setCode] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-const Light = ({ isOn, setIsOn }: LightProps) => {
-  const pullY = useMotionValue(0);
-  const stringLength = useTransform(pullY, [0, 200], [60, 220]);
-  const bulbScale = useTransform(pullY, [0, 200], [1, 1.08]);
-  const handleScale = useTransform(pullY, [0, 200], [1, 1.2]);
-  const pullingRef = useRef(false);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  // Mouse/touch handlers
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (pullingRef.current && containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      const offset = e.clientY - rect.top - 100;
-      pullY.set(Math.max(0, Math.min(offset, 200)));
-    }
-  };
-
-  const handleMouseUp = () => {
-    if (pullingRef.current) {
-      pullingRef.current = false;
-      const strength = pullY.get();
-      const velocity = strength / 10;
-
-      // Bounce animation
-      animate(pullY, 0, {
-        type: "spring",
-        stiffness: 400,
-        damping: 12,
-        velocity: -velocity,
+  const handleReview = async () => {
+    setLoading(true);
+    setFeedback("");
+    setError("");
+    try {
+      const res = await fetch("https://code-review-bot-3yq7.onrender.com/api/review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
       });
-
-      if (!isOn && strength > 80) {
-        setIsOn(true);
-      }
+      const data = await res.json();
+      if (data.feedback) setFeedback(data.feedback);
+      else setError("No feedback returned.");
+    } catch {
+      setError("Failed to get feedback. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Hide handle when light is on
-  // (optional: you can keep it visible if you want to allow turning OFF)
+  const handleClear = () => {
+    setCode("");
+    setFeedback("");
+    setError("");
+  };
+
   return (
-    <div
-      ref={containerRef}
-      className={`light-container ${isOn ? "day" : "night"}`}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      style={{
-        background: isOn
-          ? "linear-gradient(180deg, #232323 0%, #fffbe6 100%)"
-          : "#181818",
-        transition: "background 0.7s",
-      }}
-    >
-      <div className="bulb-area">
-        {/* Cord */}
-        {!isOn && (
-          <motion.div
-            className="cord"
-            style={{ height: stringLength }}
-            onMouseDown={() => (pullingRef.current = true)}
-          >
-            <motion.div
-              className="handle"
-              style={{
-                scale: handleScale,
-                boxShadow: "0 2px 12px #ffe06680",
-                background:
-                  "radial-gradient(circle at 60% 40%, #ffe066 80%, #bfae4b 100%)",
-                border: "2.5px solid #bdbdbd",
+    <div className={`bulb-app-root${isOn ? " bulb-on" : ""}`}>
+      <Light isOn={isOn} setIsOn={setIsOn} />
+      {/* Code Review UI appears ONLY when bulb is ON */}
+      {isOn && (
+        <main className={`crb-main${feedback || loading ? " split" : ""}`}>
+          <section className={`crb-code-block${feedback || loading ? " left" : ""}`}>
+            <h1 className="crb-title">🌈 AI Code Review Bot</h1>
+            <form
+              className="crb-review-form"
+              onSubmit={e => {
+                e.preventDefault();
+                handleReview();
               }}
-            />
-          </motion.div>
-        )}
-        {/* Bulb */}
-        <motion.div className="bulb" style={{ scale: bulbScale }}>
-          <div className={`bulb-shape ${isOn ? "on" : "off"}`}>
-            <svg viewBox="0 0 60 100" width="60" height="100">
-              {/* Bulb glass */}
-              <ellipse
-                cx="30"
-                cy="40"
-                rx="24"
-                ry="34"
-                fill={isOn ? "#fffbe6" : "#222"}
-                stroke="#bdbdbd"
-                strokeWidth="4"
-                filter={isOn ? "url(#bulbGlow)" : ""}
+              aria-label="Code review form"
+            >
+              <label htmlFor="crb-code-input" className="crb-visually-hidden">
+                Paste your code here
+              </label>
+              <textarea
+                id="crb-code-input"
+                name="code"
+                placeholder="Paste your code here..."
+                value={code}
+                onChange={e => setCode(e.target.value)}
+                disabled={loading}
+                aria-label="Code input"
+                aria-required="true"
               />
-              {/* Filament */}
-              <path
-                d="M25 55 Q30 45 35 55"
-                stroke={isOn ? "#ffd700" : "#bdbdbd"}
-                strokeWidth="2"
-                fill="none"
-              />
-              {/* Filament base */}
-              <circle cx="30" cy="55" r="2" fill={isOn ? "#ffd700" : "#bdbdbd"} />
-              {/* Bulb base */}
-              <rect
-                x="22"
-                y="70"
-                width="16"
-                height="12"
-                rx="3"
-                fill="#bababa"
-                stroke="#888"
-                strokeWidth="2"
-              />
-              {/* Glow filter */}
-              <defs>
-                <filter id="bulbGlow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="8" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              {/* Inner glow for filament */}
-              {isOn && (
-                <ellipse
-                  cx="30"
-                  cy="48"
-                  rx="10"
-                  ry="10"
-                  fill="#ffe066"
-                  opacity="0.4"
-                  filter="url(#bulbGlow)"
-                />
+              <div className="crb-button-group">
+                <button
+                  type="submit"
+                  disabled={loading || !code}
+                  aria-busy={loading}
+                  aria-label="Review code"
+                >
+                  {loading ? "Reviewing..." : "Review Code"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  disabled={loading && !code}
+                  aria-label="Clear code and feedback"
+                  className="crb-btn--secondary"
+                >
+                  Clear
+                </button>
+              </div>
+            </form>
+            {error && (
+              <pre className="crb-error" role="alert" tabIndex={0}>
+                <strong>Error:</strong>
+                <br />
+                {error}
+              </pre>
+            )}
+          </section>
+          {(feedback || loading) && (
+            <section className="crb-review-block">
+              {feedback && (
+                <pre className="crb-feedback" aria-live="polite" tabIndex={0}>
+                  <strong>Feedback:</strong>
+                  <br />
+                  {feedback}
+                </pre>
               )}
-            </svg>
-          </div>
-        </motion.div>
-      </div>
+              {loading && (
+                <div className="crb-feedback crb-loading">
+                  <span>Reviewing your code...</span>
+                </div>
+              )}
+            </section>
+          )}
+        </main>
+      )}
     </div>
   );
-};
+}
 
-export default Light;
 
 
 
