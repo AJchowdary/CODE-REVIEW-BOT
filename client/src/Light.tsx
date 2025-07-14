@@ -7,8 +7,8 @@ interface LightProps {
   setIsOn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const BULB_WIDTH = 60;   // match SVG width
-const BULB_HEIGHT = 100; // match SVG height
+const BULB_WIDTH = 60;
+const BULB_HEIGHT = 100;
 
 const Light = ({ isOn, setIsOn }: LightProps) => {
   const pullY = useMotionValue(0);
@@ -40,9 +40,9 @@ const Light = ({ isOn, setIsOn }: LightProps) => {
         velocity: -velocity,
       });
 
-      // Only toggle ON if currently off and pulled far enough
-      if (!isOn && strength > 80) {
-        setIsOn(true);
+      // Toggle ON/OFF if pulled far enough
+      if (strength > 80) {
+        setIsOn((prev) => !prev);
       }
     }
   };
@@ -61,7 +61,7 @@ const Light = ({ isOn, setIsOn }: LightProps) => {
         <div
           className="bulb-housing"
           ref={housingRef}
-          style={{ width: BULB_WIDTH, height: BULB_HEIGHT + 180 /* max cord */ }}
+          style={{ width: BULB_WIDTH, height: BULB_HEIGHT + 180 }}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
@@ -156,6 +156,7 @@ const Light = ({ isOn, setIsOn }: LightProps) => {
 };
 
 export default Light;
+
 
 
 
