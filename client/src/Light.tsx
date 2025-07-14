@@ -7,7 +7,7 @@ interface LightProps {
   setIsOn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Light: React.FC<LightProps> = ({ isOn, setIsOn }) => {
+const Light = ({ isOn, setIsOn }: LightProps) => {
   const pullY = useMotionValue(0);
   const stringLength = useTransform(pullY, [0, 200], [50, 250]);
   const bulbScale = useTransform(pullY, [0, 200], [1, 1.1]);
@@ -123,4 +123,5 @@ const Light: React.FC<LightProps> = ({ isOn, setIsOn }) => {
 };
 
 export default Light;
+
 
