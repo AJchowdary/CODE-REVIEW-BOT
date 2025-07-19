@@ -13,17 +13,29 @@ export default function App() {
     setLoading(true);
     setFeedback("");
     setError("");
+
     try {
       const res = await fetch("https://code-review-bot-3yq7.onrender.com/api/review", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),
       });
+
+      if (!res.ok) {
+        const errMsg = `Request failed with status ${res.status}`;
+        console.error(errMsg);
+        throw new Error(errMsg);
+      }
+
       const data = await res.json();
-      if (data.feedback) setFeedback(data.feedback);
-      else setError("No feedback returned.");
-    } catch {
-      setError("Failed to get feedback. Please try again.");
+      if (data.feedback) {
+        setFeedback(data.feedback);
+      } else {
+        setError("No feedback returned from the server.");
+      }
+    } catch (err) {
+      console.error("Review failed:", err);
+      setError("Failed to get feedback. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -130,6 +142,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
