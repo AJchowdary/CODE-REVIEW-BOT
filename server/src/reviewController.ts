@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const GROQ_API_URL = "https://api.groq.com/v1/chat/completions";
 const GROQ_API_KEY = process.env.GROQ_API_KEY; // Make sure this exists in your .env
 
 export const reviewCode = async (code: string): Promise<string> => {
