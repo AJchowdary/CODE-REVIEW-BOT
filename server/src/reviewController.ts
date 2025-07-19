@@ -19,23 +19,34 @@ Code:
 ${code}
 `;
 
-  const response = await axios.post(
-    GROQ_API_URL,
-    {
-      model: "llama-3.3-70b-versatile",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.3,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${GROQ_API_KEY}`,
-        "Content-Type": "application/json",
+  try {
+    const response = await axios.post(
+      GROQ_API_URL,
+      {
+        model: "llama-2-7b-chat", // Use smaller, faster model
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.3,
+        max_tokens: 500, // Limit tokens for faster response
       },
-    }
-  );
+      {
+        headers: {
+          Authorization: `Bearer ${GROQ_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        timeout: 10000, // 10 seconds timeout
+      }
+    );
 
-  return response.data.choices[0].message?.content || "No feedback available.";
+    return response.data.choices[0].message?.content || "No feedback available.";
+  } catch (error: any) {
+    if (error.code === 'ECONNABORTED') {
+      return "Request timed out. Please try again.";
+    }
+    console.error("Groq API error:", error.message || error);
+    return "Failed to fetch review due to server error.";
+  }
 };
+
 
 
 
