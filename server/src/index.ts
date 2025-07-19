@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { reviewCode } from "./reviewController";
+
 dotenv.config();
 const app = express();
 
@@ -40,12 +41,12 @@ app.post("/api/review", async (req, res) => {
 });
 
 // ✅ Required for Render
-const PORT = process.env.PORT || 4000;
-const HOST = "0.0.0.0"; // 👈 this is essential
+const PORT = Number(process.env.PORT) || 4000;
 
-app.listen(PORT, HOST, () => {
-  console.log(`✅ Server running on http://${HOST}:${PORT}`);
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
 });
+
 
 
 
