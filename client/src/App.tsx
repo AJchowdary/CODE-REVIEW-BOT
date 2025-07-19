@@ -17,7 +17,7 @@ export default function App() {
       const res = await fetch("https://code-review-bot-3yq7.onrender.com/api/review", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: your code }),
+        body: JSON.stringify({ code }),
       });
       const data = await res.json();
       if (data.feedback) setFeedback(data.feedback);
