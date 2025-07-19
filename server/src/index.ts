@@ -12,9 +12,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "https://code-review-bot-rho.vercel.app",
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    optionsSuccessStatus: 200,
+    credentials: true, // if using auth/cookies
   })
 );
 
