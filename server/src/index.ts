@@ -5,21 +5,25 @@ import { reviewCode } from "./reviewController";
 
 dotenv.config();
 const app = express();
+
+// 🔑 Middleware order
+app.use(express.json());
+
 app.use(
   cors({
-    origin: "https://code-review-bot-rho.vercel.app", // Your Vercel frontend URL
+    origin: "https://code-review-bot-rho.vercel.app",
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     optionsSuccessStatus: 200,
-    // credentials: true, // Only if you use cookies/auth, otherwise omit
   })
 );
 
-// ... your routes below
+// ✅ Health check route (optional but recommended)
+app.get("/", (req, res) => {
+  res.send("✅ Code Review Bot Backend is live.");
+});
 
-
-app.use(express.json());
-
+// ✅ Main API route
 app.post("/api/review", async (req, res) => {
   const { code } = req.body;
 
@@ -36,10 +40,14 @@ app.post("/api/review", async (req, res) => {
   }
 });
 
+// ✅ Required for Render
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+const HOST = "0.0.0.0"; // 👈 this is essential
+
+app.listen(PORT, HOST, () => {
+  console.log(`✅ Server running on http://${HOST}:${PORT}`);
 });
+
 
 
 
