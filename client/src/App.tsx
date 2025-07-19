@@ -21,6 +21,12 @@ export default function App() {
         body: JSON.stringify({ code }),
       });
 
+      if (res.status === 204) {
+        // No Content returned
+        setError("No feedback returned. Server responded with 204 No Content.");
+        return;
+      }
+
       if (!res.ok) {
         const errMsg = `Request failed with status ${res.status}`;
         console.error(errMsg);
@@ -28,10 +34,11 @@ export default function App() {
       }
 
       const data = await res.json();
+
       if (data.feedback) {
         setFeedback(data.feedback);
       } else {
-        setError("No feedback returned from the server.");
+        setError("Feedback was empty or not in expected format.");
       }
     } catch (err) {
       console.error("Review failed:", err);
@@ -142,6 +149,8 @@ export default function App() {
     </div>
   );
 }
+
+
 
 
 
