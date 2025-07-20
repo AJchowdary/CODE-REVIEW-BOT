@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
-const GROQ_API_KEY = process.env.GROQ_API_KEY; // Make sure this exists in your .env
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 export const reviewCode = async (code: string): Promise<string> => {
   const prompt = `      
@@ -23,29 +23,30 @@ ${code}
     const response = await axios.post(
       GROQ_API_URL,
       {
-        model: "llama-2-7b-chat", // Use smaller, faster model
+        model: "llama3-70b-8192", // ✅ FIXED model name
         messages: [{ role: "user", content: prompt }],
         temperature: 0.3,
-        max_tokens: 500, // Limit tokens for faster response
+        max_tokens: 500,
       },
       {
         headers: {
           Authorization: `Bearer ${GROQ_API_KEY}`,
           "Content-Type": "application/json",
         },
-        timeout: 10000, // 10 seconds timeout
+        timeout: 10000,
       }
     );
 
     return response.data.choices[0].message?.content || "No feedback available.";
   } catch (error: any) {
-    if (error.code === 'ECONNABORTED') {
+    if (error.code === "ECONNABORTED") {
       return "Request timed out. Please try again.";
     }
     console.error("Groq API error:", error.message || error);
     return "Failed to fetch review due to server error.";
   }
 };
+
 
 
 
