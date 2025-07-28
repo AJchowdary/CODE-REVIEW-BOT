@@ -60,6 +60,7 @@ ul, ol {
   font-family: system-ui, sans-serif;
   transition: background 0.7s;
 }
+
 .bulb-app-root.bulb-on {
   background: linear-gradient(180deg, #232323 0%, #fffbe6 100%);
   color: #333;
@@ -107,10 +108,12 @@ ul, ol {
   align-items: center;
   justify-content: center;
 }
+
 .bulb-shape.on svg {
   filter: drop-shadow(0 0 32px #ffe066cc);
   transition: filter 0.4s;
 }
+
 .bulb-shape.off svg {
   filter: none;
   transition: filter 0.4s;
@@ -287,7 +290,8 @@ button[disabled] {
   clip: rect(0, 0, 0, 0) !important;
   border: 0 !important;
 }
-/* Center the main Code Review Bot UI vertically and horizontally */
+
+/* ===== Center the main Code Review Bot UI vertically and horizontally ===== */
 .centered-ui {
   display: flex;
   justify-content: center;
@@ -315,7 +319,7 @@ button[disabled] {
   width: 100%;
 }
 
-/* Hide the feedback block by default if no feedback */
+/* Feedback block styling */
 .centered-ui .crb-review-block {
   width: 100%;
   max-height: 300px;
@@ -327,6 +331,7 @@ button[disabled] {
   flex-direction: column;
   height: auto;
 }
+
 
 
 
