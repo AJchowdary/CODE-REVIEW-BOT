@@ -186,7 +186,6 @@ export default function App() {
                 style={{ flex: 1, display: "flex", flexDirection: "column" }}
               >
                 <label htmlFor="crb-code-input" className="crb-visually-hidden">
-                  Paste your code here
                 </label>
                 <textarea
                   id="crb-code-input"
