@@ -287,6 +287,46 @@ button[disabled] {
   clip: rect(0, 0, 0, 0) !important;
   border: 0 !important;
 }
+/* Center the main Code Review Bot UI vertically and horizontally */
+.centered-ui {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;          /* full viewport height */
+  flex-direction: column; /* stack children vertically */
+  padding: 1rem;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #232323 0%, #fffbe6 100%);
+  color: #333;
+}
+
+/* Override .crb-main for single-column layout when centered */
+.centered-ui .crb-main {
+  width: 90vw;
+  max-width: 600px;  /* narrower container for better focus */
+  height: auto;      /* height adapts to content */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Single column form section styling */
+.centered-ui .crb-code-block {
+  width: 100%;
+}
+
+/* Hide the feedback block by default if no feedback */
+.centered-ui .crb-review-block {
+  width: 100%;
+  max-height: 300px;
+  overflow: auto;
+}
+
+/* Remove the split layout styling when centered */
+.centered-ui .crb-main.split {
+  flex-direction: column;
+  height: auto;
+}
 
 
 
