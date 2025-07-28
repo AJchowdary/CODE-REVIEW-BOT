@@ -60,12 +60,15 @@ body,
   flex: 1;
   padding: 2rem;
   background: #f0f4f7;
-  overflow-y: auto;
+  overflow-y: auto;             /* ✅ enables vertical scrolling */
+  overflow-x: hidden;           /* ✅ disables horizontal scrolling */
   box-sizing: border-box;
-  white-space: pre-wrap;
+  white-space: pre-wrap;        /* ✅ preserves line breaks and wraps long lines */
+  word-break: break-word;       /* ✅ breaks long words instead of horizontal scroll */
   font-family: monospace;
   border-left: 2px solid #ccc;
 }
+
 
 /* Textarea styling */
 textarea#crb-code-input {
