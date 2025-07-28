@@ -1,363 +1,111 @@
-/* ===== Modern CSS Reset ===== */
-*, *::before, *::after {
-  box-sizing: border-box;
+/* Make sure app fills the screen */
+html,
+body,
+#root {
+  height: 100%;
   margin: 0;
-  padding: 0;
+  font-family: sans-serif;
 }
 
-html {
-  font-size: 16px;
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  color: #222;
-  line-height: 1.6;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-:focus {
-  outline: 2px solid #2563eb;
-  outline-offset: 2px;
-}
-
-img, picture, video, canvas, svg {
-  display: block;
-  max-width: 100%;
-}
-
-input, button, textarea, select {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-p, h1, h2, h3, h4, h5, h6 {
-  overflow-wrap: break-word;
-}
-
-ul, ol {
-  margin: 0;
-  padding: 0;
-}
-
-#root, #__next {
-  isolation: isolate;
-}
-
-/* ===== Lamp and App Styles ===== */
+/* Container after light turns on */
 .bulb-app-root {
-  min-height: 100vh;
-  background: #181818;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: system-ui, sans-serif;
-  transition: background 0.7s;
-}
-.bulb-app-root.bulb-on {
-  background: linear-gradient(180deg, #232323 0%, #fffbe6 100%);
-  color: #333;
-}
-
-/* Lamp stays centered above */
-.light-container {
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 220px; /* enough space for lamp/cord */
-  background: transparent;
-  transition: background 0.7s;
-  margin-bottom: 0;
-}
-
-.bulb-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2rem;
-  position: relative;
-}
-
-.bulb-housing {
-  position: relative;
-  width: 60px;
-  height: 280px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.bulb {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 2;
-  margin-bottom: -8px;
-}
-
-.bulb-shape {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.bulb-shape.on svg {
-  filter: drop-shadow(0 0 32px #ffe066cc);
-  transition: filter 0.4s;
-}
-.bulb-shape.off svg {
-  filter: none;
-  transition: filter 0.4s;
-}
-
-.cord {
-  position: absolute;
-  left: 50%;
-  top: 90px; /* Attach cord to bulb base (adjust as needed for your SVG) */
-  transform: translateX(-50%);
-  width: 6px;
-  background: #bbb;
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: grab;
-  transition: background 0.3s;
-  z-index: 1;
-}
-
-.handle {
-  width: 28px;
-  height: 28px;
-  background: radial-gradient(circle at 60% 40%, #ffe066 80%, #bfae4b 100%);
-  border-radius: 50%;
-  border: 2.5px solid #bdbdbd;
-  margin: 0 auto;
-  margin-top: -14px;
-  box-shadow: 0 2px 12px #ffe06680;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ===== Code Review UI Styles ===== */
-
-/* Center the main Code Review Bot UI vertically and horizontally */
-.centered-ui {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;          /* full viewport height */
-  flex-direction: column; /* stack children vertically */
-  padding: 1rem;
-  box-sizing: border-box;
-  background: linear-gradient(180deg, #232323 0%, #fffbe6 100%);
-  color: #333;
-}
-
-/* Override .crb-main for single-column layout when centered */
-.centered-ui .crb-main {
-  width: 90vw;
-  max-width: 600px;  /* narrower container for better focus */
-  height: auto;      /* height adapts to content */
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* Single column form section styling */
-.centered-ui .crb-code-block {
-  width: 100%;
-}
-
-/* Hide the feedback block by default if no feedback */
-.centered-ui .crb-review-block {
-  width: 100%;
-  max-height: 300px;
-  overflow: auto;
-}
-
-/* Remove the split layout styling when centered */
-.centered-ui .crb-main.split {
-  flex-direction: column;
-  height: auto;
-}
-
-/* When split (after Review Code), fill the area below the lamp */
-.crb-main.split {
-  display: flex;
-  flex-direction: row;
-  gap: 2rem;
-  align-items: stretch;  /* stretch children vertically */
-  height: calc(100vh - 60px); /* full viewport height minus some margin */
-  width: 95vw;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-/* Left code block and right feedback block */
-.crb-main.split .crb-code-block.left,
-.crb-main.split .crb-review-block {
-  flex: 1 1 0;
   height: 100%;
-  min-height: 0; /* allow flexbox to control height */
-  max-height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+/* Main UI layout */
+.crb-main {
+  display: flex;
+  flex: 1;
+  height: 100%;
   overflow: hidden;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  background: white;
-  box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
 }
 
-/* Code input area styles */
-.crb-main.split .crb-code-block.left textarea {
-  font-size: 1.1rem;
+/* Code block and feedback block each take 50% width */
+.crb-code-block,
+.crb-review-block {
+  flex: 1;
   padding: 1rem;
-  border-radius: 0 0.5rem 0.5rem 0;
-  border: none;
-  resize: vertical;
   height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Code block: form stretches fully */
+.crb-review-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+textarea#crb-code-input {
+  flex: 1;
+  resize: none;
   min-height: 0;
-  overflow: auto;
-  font-family: monospace;
+  max-height: 100%;
+  font-size: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
-/* Feedback block styling with horizontal scroll */
-.crb-main.split .crb-review-block {
+/* Feedback scrolls vertically */
+.crb-feedback {
+  flex: 1;
   overflow-y: auto;
-  overflow-x: auto; /* horizontal scroll if needed */
-  white-space: pre; /* preserve spaces so horizontal scroll works */
-  font-family: monospace;
   padding: 1rem;
-  color: #222;
-  background: #f8f8ff;
-  border-radius: 0.5rem;
+  background: #f9f9f9;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.1);
+  font-family: monospace;
+  border: 1px solid #ccc;
 }
 
-/* Ensure feedback text wraps only when needed */
-.crb-main.split .crb-review-block pre {
-  white-space: pre; /* keep horizontal scroll */
-  overflow-x: auto;
-}
-
-/* Button styles and spacing */
+/* Buttons */
 .crb-button-group {
-  margin-top: 1rem;
   display: flex;
   gap: 1rem;
-  justify-content: flex-start;
+  margin-top: 1rem;
 }
 
+.crb-button-group button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.crb-btn--secondary {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+}
+
+/* Title */
 .crb-title {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #222;
+  margin: 0 0 1rem 0;
+  font-size: 1.6rem;
 }
 
-.crb-review-form textarea {
-  width: 100%;
-  min-height: 300px; /* bigger initial height */
-  max-height: 500px; /* limit max height */
-  font-size: 1.1rem;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid #ddd;
-  margin-bottom: 1rem;
-  resize: vertical;
-  font-family: inherit;
-  overflow: auto;
-  flex: 1 1 auto;
-}
-
-/* Feedback area also scrollable and fills its box */
-.crb-feedback {
-  flex: 1 1 auto;
-  min-height: 0;
-  max-height: 100%;
-  overflow: auto;
-  background: #f8f8ff;
-  color: #222;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin-top: 1rem;
-  font-size: 1rem;
-  white-space: pre-wrap;
-  box-shadow: 0 1px 4px #0001;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Button styles */
-button,
-.crb-btn--secondary {
-  padding: 0.7rem 1.4rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
-  font-weight: 600;
-}
-
-button[type="submit"] {
-  background: #2563eb;
-  color: #fff;
-  border-color: #2563eb;
-  box-shadow: 0 2px 8px #2563eb22;
-}
-button[type="submit"]:hover:not([disabled]) {
-  background: #1746a0;
-  border-color: #1746a0;
-}
-
-.crb-btn--secondary {
-  background: #e11d48;
-  color: #fff;
-  border: 2px solid #e11d48;
-}
-.crb-btn--secondary:hover:not([disabled]) {
-  background: #be123c;
-  border-color: #be123c;
-}
-
-button[disabled] {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.crb-loading {
-  color: #888;
-}
-
+/* Error style */
 .crb-error {
-  background: #fff4e6;
-  color: #c00;
-  border: 1px solid #ffe066;
-  border-radius: 0.5rem;
-  padding: 1rem;
+  color: red;
   margin-top: 1rem;
-  font-size: 1rem;
 }
 
-/* Accessibility */
+/* Hide visually but keep accessible */
 .crb-visually-hidden {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  border: 0 !important;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
+
 
 
 
