@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 
 const clickSoundUrl =
@@ -9,7 +9,7 @@ export default function App() {
   const [showIntro, setShowIntro] = useState(true); // show/hide intro screen
   const [opacity, setOpacity] = useState(1); // flicker opacity for intro
   const flickerCountRef = useRef(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<number | null>(null);
   const clickSoundRef = useRef<HTMLAudioElement | null>(null);
 
   // Your existing states and handlers for code review bot
@@ -25,10 +25,10 @@ export default function App() {
         clickSoundRef.current.play();
       }
       flickerCountRef.current = 0;
-      intervalRef.current = setInterval(() => {
+      intervalRef.current = window.setInterval(() => {
         flickerCountRef.current++;
         setOpacity(flickerCountRef.current % 2 === 0 ? 1 : 0.1);
-        if (flickerCountRef.current > 4 && intervalRef.current) {
+        if (flickerCountRef.current > 4 && intervalRef.current !== null) {
           clearInterval(intervalRef.current);
           setOpacity(0);
           setTimeout(() => {
@@ -40,7 +40,9 @@ export default function App() {
       }, 150);
     }
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+      }
     };
   }, [isLightOn]);
 
@@ -249,6 +251,7 @@ export default function App() {
     </>
   );
 }
+
 
 
 
