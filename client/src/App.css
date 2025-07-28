@@ -60,7 +60,6 @@ ul, ol {
   font-family: system-ui, sans-serif;
   transition: background 0.7s;
 }
-
 .bulb-app-root.bulb-on {
   background: linear-gradient(180deg, #232323 0%, #fffbe6 100%);
   color: #333;
@@ -108,12 +107,10 @@ ul, ol {
   align-items: center;
   justify-content: center;
 }
-
 .bulb-shape.on svg {
   filter: drop-shadow(0 0 32px #ffe066cc);
   transition: filter 0.4s;
 }
-
 .bulb-shape.off svg {
   filter: none;
   transition: filter 0.4s;
@@ -151,41 +148,112 @@ ul, ol {
 
 /* ===== Code Review UI Styles ===== */
 
+/* Center the main Code Review Bot UI vertically and horizontally */
+.centered-ui {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;          /* full viewport height */
+  flex-direction: column; /* stack children vertically */
+  padding: 1rem;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #232323 0%, #fffbe6 100%);
+  color: #333;
+}
+
+/* Override .crb-main for single-column layout when centered */
+.centered-ui .crb-main {
+  width: 90vw;
+  max-width: 600px;  /* narrower container for better focus */
+  height: auto;      /* height adapts to content */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Single column form section styling */
+.centered-ui .crb-code-block {
+  width: 100%;
+}
+
+/* Hide the feedback block by default if no feedback */
+.centered-ui .crb-review-block {
+  width: 100%;
+  max-height: 300px;
+  overflow: auto;
+}
+
+/* Remove the split layout styling when centered */
+.centered-ui .crb-main.split {
+  flex-direction: column;
+  height: auto;
+}
+
 /* When split (after Review Code), fill the area below the lamp */
 .crb-main.split {
   display: flex;
   flex-direction: row;
   gap: 2rem;
-  align-items: flex-start;
-  height: calc(100vh - 240px); /* 240px = lamp + margin, adjust if needed */
-  min-height: 400px;
-  width: 90vw;
-  max-width: 1200px;
+  align-items: stretch;  /* stretch children vertically */
+  height: calc(100vh - 60px); /* full viewport height minus some margin */
+  width: 95vw;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.crb-main.split .crb-code-block,
+/* Left code block and right feedback block */
+.crb-main.split .crb-code-block.left,
 .crb-main.split .crb-review-block {
-  margin-top: 0;
-  margin-bottom: 0;
-  height: 100%;
-  max-height: 100%;
-  min-height: 0;
   flex: 1 1 0;
+  height: 100%;
+  min-height: 0; /* allow flexbox to control height */
+  max-height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  background: white;
+  box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
 }
 
-.crb-code-block.left,
-.crb-review-block {
-  flex: 1 1 0;
-  min-width: 0;
-  min-height: 0;
+/* Code input area styles */
+.crb-main.split .crb-code-block.left textarea {
+  font-size: 1.1rem;
+  padding: 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  border: none;
+  resize: vertical;
   height: 100%;
-  max-height: 100%;
-  display: flex;
-  flex-direction: column;
+  min-height: 0;
   overflow: auto;
+  font-family: monospace;
+}
+
+/* Feedback block styling with horizontal scroll */
+.crb-main.split .crb-review-block {
+  overflow-y: auto;
+  overflow-x: auto; /* horizontal scroll if needed */
+  white-space: pre; /* preserve spaces so horizontal scroll works */
+  font-family: monospace;
+  padding: 1rem;
+  color: #222;
+  background: #f8f8ff;
+  border-radius: 0.5rem;
+}
+
+/* Ensure feedback text wraps only when needed */
+.crb-main.split .crb-review-block pre {
+  white-space: pre; /* keep horizontal scroll */
+  overflow-x: auto;
+}
+
+/* Button styles and spacing */
+.crb-button-group {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start;
 }
 
 .crb-title {
@@ -196,10 +264,10 @@ ul, ol {
 
 .crb-review-form textarea {
   width: 100%;
-  min-height: 120px;
-  max-height: 100%;
-  font-size: 1rem;
-  padding: 0.8rem;
+  min-height: 300px; /* bigger initial height */
+  max-height: 500px; /* limit max height */
+  font-size: 1.1rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   border: 1px solid #ddd;
   margin-bottom: 1rem;
@@ -291,46 +359,7 @@ button[disabled] {
   border: 0 !important;
 }
 
-/* ===== Center the main Code Review Bot UI vertically and horizontally ===== */
-.centered-ui {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;          /* full viewport height */
-  flex-direction: column; /* stack children vertically */
-  padding: 1rem;
-  box-sizing: border-box;
-  background: linear-gradient(180deg, #232323 0%, #fffbe6 100%);
-  color: #333;
-}
 
-/* Override .crb-main for single-column layout when centered */
-.centered-ui .crb-main {
-  width: 90vw;
-  max-width: 600px;  /* narrower container for better focus */
-  height: auto;      /* height adapts to content */
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* Single column form section styling */
-.centered-ui .crb-code-block {
-  width: 100%;
-}
-
-/* Feedback block styling */
-.centered-ui .crb-review-block {
-  width: 100%;
-  max-height: 300px;
-  overflow: auto;
-}
-
-/* Remove the split layout styling when centered */
-.centered-ui .crb-main.split {
-  flex-direction: column;
-  height: auto;
-}
 
 
 
