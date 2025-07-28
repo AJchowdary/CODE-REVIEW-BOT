@@ -1,161 +1,157 @@
-import { useRef } from "react";
-import { motion, useMotionValue, animate, useTransform } from "framer-motion";
-import "./App.css";
+import React, { useState, useEffect, useRef } from "react";
 
-interface LightProps {
-  isOn: boolean;
-  setIsOn: React.Dispatch<React.SetStateAction<boolean>>;
-}
+const clickSoundUrl =
+  "https://assets.mixkit.co/sfx/preview/mixkit-light-switch-on-2585.mp3";
 
-const BULB_WIDTH = 60;
-const BULB_HEIGHT = 100;
+const IntroScreen = () => {
+  const [isLightOn, setIsLightOn] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
+  const [opacity, setOpacity] = useState(1);
+  const flickerCountRef = useRef(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const clickSoundRef = useRef<HTMLAudioElement | null>(null);
 
-const Light = ({ isOn, setIsOn }: LightProps) => {
-  const pullY = useMotionValue(0);
-  const stringLength = useTransform(pullY, [0, 200], [40, 180]);
-  const bulbScale = useTransform(pullY, [0, 200], [1, 1.08]);
-  const handleScale = useTransform(pullY, [0, 200], [1, 1.18]);
-  const pullingRef = useRef(false);
-  const housingRef = useRef<HTMLDivElement | null>(null);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (pullingRef.current && housingRef.current) {
-      const rect = housingRef.current.getBoundingClientRect();
-      const offset = e.clientY - rect.top - BULB_HEIGHT;
-      pullY.set(Math.max(0, Math.min(offset, 200)));
-    }
-  };
-
-  const handleMouseUp = () => {
-    if (pullingRef.current) {
-      pullingRef.current = false;
-      const strength = pullY.get();
-      const velocity = strength / 10;
-
-      // Always bounce the cord back with a spring
-      animate(pullY, 0, {
-        type: "spring",
-        stiffness: 500,
-        damping: 18,
-        velocity: -velocity,
-      });
-
-      // Toggle ON/OFF if pulled far enough
-      if (strength > 80) {
-        setIsOn((prev) => !prev);
+  useEffect(() => {
+    if (isLightOn) {
+      if (clickSoundRef.current) {
+        clickSoundRef.current.play();
       }
+      flickerCountRef.current = 0;
+      intervalRef.current = setInterval(() => {
+        flickerCountRef.current++;
+        setOpacity(flickerCountRef.current % 2 === 0 ? 1 : 0.1);
+        if (flickerCountRef.current > 4 && intervalRef.current) {
+          clearInterval(intervalRef.current);
+          setOpacity(0);
+          setTimeout(() => {
+            setShowIntro(false);
+            document.body.style.backgroundColor = "#f5f5f5";
+            document.body.style.overflow = "auto";
+          }, 800);
+        }
+      }, 150);
     }
-  };
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [isLightOn]);
 
   return (
-    <div
-      className={`light-container ${isOn ? "day" : "night"}`}
-      style={{
-        background: isOn
-          ? "linear-gradient(180deg, #232323 0%, #fffbe6 100%)"
-          : "#181818",
-        transition: "background 0.7s",
-      }}
-    >
-      <div className="bulb-area">
+    <>
+      {showIntro ? (
         <div
-          className="bulb-housing"
-          ref={housingRef}
-          style={{ width: BULB_WIDTH, height: BULB_HEIGHT + 180 }}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "linear-gradient(145deg, #0f0f1f, #1a1a2e)",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "#f5f5f5",
+            textAlign: "center",
+            zIndex: 1000,
+            opacity,
+            transition: "opacity 0.15s ease",
+          }}
         >
-          {/* Bulb (on top, z-index: 2) */}
-          <motion.div className="bulb" style={{ scale: bulbScale, zIndex: 2 }}>
-            <div className={`bulb-shape ${isOn ? "on" : "off"}`}>
-              <svg viewBox="0 0 60 100" width="60" height="100">
-                {/* Bulb glass */}
-                <ellipse
-                  cx="30"
-                  cy="40"
-                  rx="24"
-                  ry="34"
-                  fill={isOn ? "#fffbe6" : "#222"}
-                  stroke="#bdbdbd"
-                  strokeWidth="4"
-                  filter={isOn ? "url(#bulbGlow)" : ""}
-                />
-                {/* Filament */}
-                <path
-                  d="M25 55 Q30 45 35 55"
-                  stroke={isOn ? "#ffd700" : "#bdbdbd"}
-                  strokeWidth="2"
-                  fill="none"
-                />
-                {/* Filament base */}
-                <circle cx="30" cy="55" r="2" fill={isOn ? "#ffd700" : "#bdbdbd"} />
-                {/* Bulb base */}
-                <rect
-                  x="22"
-                  y="70"
-                  width="16"
-                  height="12"
-                  rx="3"
-                  fill="#bababa"
-                  stroke="#888"
-                  strokeWidth="2"
-                />
-                {/* Glow filter */}
-                <defs>
-                  <filter id="bulbGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="8" result="coloredBlur" />
-                    <feMerge>
-                      <feMergeNode in="coloredBlur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
-                {/* Inner glow for filament */}
-                {isOn && (
-                  <ellipse
-                    cx="30"
-                    cy="48"
-                    rx="10"
-                    ry="10"
-                    fill="#ffe066"
-                    opacity="0.4"
-                    filter="url(#bulbGlow)"
-                  />
-                )}
-              </svg>
-            </div>
-          </motion.div>
-          {/* Cord (behind, z-index: 1), attached to bulb base */}
-          <motion.div
-            className="cord"
+          <h2>It's dark in here...</h2>
+          <div
             style={{
-              height: stringLength,
-              zIndex: 1,
-              left: "50%",
-              top: BULB_HEIGHT - 10, // attach to bulb base
-              transform: "translateX(-50%)",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              marginTop: "1rem",
             }}
-            onMouseDown={() => (pullingRef.current = true)}
           >
-            <motion.div
-              className="handle"
+            <span style={{ fontSize: "1.2rem" }}>💡 Turn On the Light</span>
+            <label
               style={{
-                scale: handleScale,
-                boxShadow: "0 2px 12px #ffe06680",
-                background:
-                  "radial-gradient(circle at 60% 40%, #ffe066 80%, #bfae4b 100%)",
-                border: "2.5px solid #bdbdbd",
+                position: "relative",
+                display: "inline-block",
+                width: 70,
+                height: 34,
               }}
-            />
-          </motion.div>
+            >
+              <input
+                type="checkbox"
+                checked={isLightOn}
+                onChange={() => setIsLightOn(!isLightOn)}
+                style={{ opacity: 0, width: 0, height: 0 }}
+              />
+              <span
+                style={{
+                  position: "absolute",
+                  cursor: "pointer",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: isLightOn ? "#ffd700" : "#444",
+                  borderRadius: 34,
+                  transition: "background-color 0.5s ease, box-shadow 0.5s ease",
+                  boxShadow: isLightOn
+                    ? "0 0 20px #ffd700"
+                    : "none",
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    content: '""',
+                    height: 26,
+                    width: 26,
+                    left: isLightOn ? 36 : 4,
+                    bottom: 4,
+                    backgroundColor: isLightOn ? "#fff7d1" : "white",
+                    transition: "transform 0.5s ease, background-color 0.3s",
+                    borderRadius: "50%",
+                    boxShadow: "0 0 10px rgba(255, 255, 255, 0.6)",
+                  }}
+                />
+              </span>
+            </label>
+          </div>
+
+          <audio
+            ref={clickSoundRef}
+            src={clickSoundUrl}
+            preload="auto"
+          />
         </div>
-      </div>
-    </div>
+      ) : (
+        <main
+          style={{
+            height: "100vh",
+            background: "linear-gradient(to right, #f7f7f7, #ffffff)",
+            padding: "2rem",
+            animation: "fadeIn 1s ease-in-out",
+          }}
+        >
+          <h1 style={{ fontSize: "2.5rem", color: "#222" }}>
+            Welcome to Ajay's Portfolio
+          </h1>
+          <p>This is where your main content goes — projects, about, contact, etc.</p>
+        </main>
+      )}
+
+      <style>
+        {`
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+        `}
+      </style>
+    </>
   );
 };
 
-export default Light;
+export default IntroScreen;
+
 
 
 
