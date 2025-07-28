@@ -5,20 +5,18 @@ const clickSoundUrl =
   "https://assets.mixkit.co/sfx/preview/mixkit-light-switch-on-2585.mp3";
 
 export default function App() {
-  const [isLightOn, setIsLightOn] = useState(false); // intro toggle state
-  const [showIntro, setShowIntro] = useState(true); // show/hide intro screen
-  const [opacity, setOpacity] = useState(1); // flicker opacity for intro
+  const [isLightOn, setIsLightOn] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
+  const [opacity, setOpacity] = useState(1);
   const flickerCountRef = useRef(0);
   const intervalRef = useRef<number | null>(null);
   const clickSoundRef = useRef<HTMLAudioElement | null>(null);
 
-  // Code review bot states
   const [code, setCode] = useState("");
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Flicker and fade out intro when toggled ON
   useEffect(() => {
     if (isLightOn) {
       if (clickSoundRef.current) {
@@ -251,6 +249,7 @@ export default function App() {
     </>
   );
 }
+
 
 
 
